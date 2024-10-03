@@ -1,0 +1,142 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// #define int long long
+#define pb push_back
+#define endl "\n"
+
+
+const long long mod  = 1000000007;
+const int N = 200001;
+
+int n;
+int dp[(1<<10)],cnt[(1<<10)];
+string s;
+int clc[10][2][2][(1<<10)];
+vector<int> dig;
+int glb;
+
+int cnt_dp(int p,int is,int ib,int msk){
+    if(p==8) return (msk==glb);
+    if(clc[p][is][ib][msk]!=-1) return clc[p][is][ib][msk];
+
+    if(!is && s[p]=='0') return clc[p][is][ib][msk]=cnt_dp(p+1,is,ib,msk);
+
+    clc[p][is][ib][msk]=0;
+
+    if(!is) clc[p][is][ib][msk]=cnt_dp(p+1,is,ib,msk);
+
+    for(auto u:dig){
+
+        if(!ib && u>(s[p]-'0')) continue;
+        int x=ib;
+        if(u<(s[p]-'0')) x=1;
+
+        int y=u;
+
+        clc[p][is][ib][msk]+=cnt_dp(p+1,1,x,msk | (1<<y));
+
+
+    }
+
+    // cout << p << " " << is << " " << ib << " " << msk << " -- " << clc[p][is][ib][msk] << endl;
+
+    return clc[p][is][ib][msk];
+}
+
+void solve(){
+    s.clear();
+    memset(dp,0,sizeof dp);
+    memset(cnt,0,sizeof cnt);
+
+    cin >> n;
+    int tmp=n;
+    while(tmp){
+        s.push_back(tmp%10+'0');
+        tmp/=10;
+    }
+
+    while(s.size()<8) s.push_back('0');
+    reverse(s.begin(),s.end());
+
+    
+    for(int i=2;i<(1<<10);i++){
+
+        // if(i!=2) continue;
+
+        memset(clc,-1,sizeof clc);
+        dig.clear();
+        glb=i;
+
+        for(int j=0;j<10;j++) if(i & (1<<j)) dig.pb(j);
+
+        cnt[i]=cnt_dp(0,0,0,0);
+
+        // if(i & 1) cnt[i]--;
+
+        // bitset<10> b(i);
+        // cout << b << " - " << cnt[i] << endl ;
+
+        
+    }
+    
+
+
+    dp[0]=1;
+    for(int mask=1;mask<(1<<5);mask++){
+
+        int newmask=mask;
+
+        dp[mask]=1;
+
+        cout << "stating\n";
+
+        int s=newmask;
+        while(s>0){
+            dp[mask]+=(cnt[s]*(dp[mask ^ s]));
+            dp[mask]%=mod;
+
+            bitset<10> b(s);
+            cout << b << " - " << cnt[s] << " " << dp[mask ^ s] << endl;
+
+            s=(s-1) & newmask; 
+        }
+
+        cout << endl;
+        
+
+        bitset<10> b(mask);
+        cout << "dp " << b << " - " << dp[mask] << endl  << endl;
+    }
+
+    cout << dp[(1<<10)-1] << endl;
+    
+}
+
+
+
+
+signed main(){
+ 
+// #ifndef ONLINE_JUDGE
+ 
+//     freopen("input.txt", "r", stdin);
+ 
+//     freopen("output.txt", "w", stdout);
+   
+// #endif
+
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+
+    int t=1;
+    cin >> t;
+    while(t--){
+        solve();
+    }
+
+
+
+ 
+}
