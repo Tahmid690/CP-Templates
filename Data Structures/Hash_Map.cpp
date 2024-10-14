@@ -3,10 +3,6 @@
 using namespace __gnu_pbds;
 
 
-typedef cc_hash_table<ll, ll, hash<ll>> ht;
-
-//Use ht as unordered_map
-
 const int RANDOM = chrono::high_resolution_clock::now().time_since_epoch().count();
 struct chash {
     int operator()(int x) const { return x ^ RANDOM; }
@@ -30,7 +26,6 @@ struct custom_hash {
 gp_hash_table<int, int, custom_hash> mp;
 
 //For Pair
-
 struct chash {
     int operator()(pii x) const { return x.first* 31 + x.second; }
 };
