@@ -1,9 +1,6 @@
 mt19937_64 rnd(time(0));
 int main()
 {
-    lp(i,1,1000000)
-    {
-        ara1[i]=rnd();
-    }
+    ara[i]=rnd();
     
 }
