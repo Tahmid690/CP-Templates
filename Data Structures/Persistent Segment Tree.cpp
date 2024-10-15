@@ -15,7 +15,7 @@ struct perseg{
 	int build(int b,int e){
 		int cur=++id;
 		if(b==e){
-			t[cur].val=a[e];
+			t[cur].val=0;
 			return cur;	
 		}
 		int mid=(b+e)>>1;
@@ -28,7 +28,7 @@ struct perseg{
 		int cur=++id;
 		t[cur]=t[pre];
 		if(b==e){
-			t[cur].val=v;
+			t[cur].val+=v;
 			return cur;
 		}
 		int mid=(b+e)>>1;
@@ -47,8 +47,14 @@ struct perseg{
 		int mid=(b+e)>>1;
 		return qry(t[cur].l,b,mid,p,q)+qry(t[cur].r,mid+1,e,p,q);
 	}
+	int findkth(int lef,int rig,int b,int e,int k){
+		if(b==e) return b;
+		int mid=(b+e)>>1;
+		int cnt=t[t[rig].l].val-t[t[lef].l].val;
+		if(cnt>=k) return findkth(t[lef].l,t[rig].l,b,mid,k);
+		else return findkth(t[lef].r,t[rig].r,mid+1,e,k-cnt);
+	}
 }sg;
-
 
 vector<int> ver;
 
