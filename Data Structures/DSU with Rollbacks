@@ -9,8 +9,8 @@ public:
 		sets=n;
 	}
 	int find(int x){
-		if(x!=par[x]) return find(par[x]);
-		return par[x];
+		while(x!=par[x]) x=par[x];
+		return x;
 	}
 	void union_sets(int x,int y){
 		int rootX=find(x);
